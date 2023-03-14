@@ -57,6 +57,9 @@ export default function Home() {
               Translate to SQL
             </button>
           </div>
+          <div className="">
+            
+          </div>
 
 
         </div>
