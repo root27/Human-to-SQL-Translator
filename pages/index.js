@@ -1,10 +1,43 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import {useState} from "react";
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+
+  const [inputText, setInputText] = useState("");
+
+  const [outputText, setOutputText] = useState("");
+
+  const [loading,setLoading] = useState(false);
+
+
+
+  const handleEvent = (e) => {
+    e.preventDefault();
+    setLoading(!loading);
+    console.log("clicked");
+    fetch("/api/translate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inputText: inputText,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setLoading(false);
+        setOutputText(data.outputText);
+      });
+  }
+
+
+
   return (
     <>
       <Head>
@@ -35,34 +68,73 @@ export default function Home() {
               Human Language Query
             </h2>
           </div>
-          <div className="
-            flex text-center
-          ">
-            <textarea className="
-               border-2 border-gray-700 bg-gray-700 rounded-md p-2 mt-4 text-white
-            "
-              rows={3}
-              cols={40}
-              required
-              placeholder="e.g. show me all the cars that are red "
-
-            ></textarea>
-          </div>
-          <div className="
-            flex flex-row justify-start
-          ">
-            <button className="
-              bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4
+          <form onSubmit={(event) => handleEvent(event)} >
+            <div className="
+              flex text-center
             ">
-              Translate to SQL
-            </button>
-          </div>
-          <div className="">
-            
-          </div>
+              <textarea className="
+                border-2 border-gray-700 bg-gray-700 rounded-md p-2 mt-4 text-white
+              "
+                rows={3}
+                cols={40}
+                required="required"
+                placeholder="e.g. show me all the cars that are red "
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}></textarea>
+            </div>
+            <div className="
+              flex flex-row justify-start
+            ">
+              <button className={`bg-blue-500 hover:bg-blue-700  text-white font-bold py-2 px-4 rounded mt-4 ${loading && "opacity-50 cursor-not-allowed"}`}
+              type="submit"
+              disabled={loading}
+              >
+                {
+                  loading ? "Translating..." : "Translate to SQL"
+                }
+              </button>
+            </div>
+          </form>
 
 
         </div>
+        {
+          outputText && (
+            <div className="
+          flex flex-col  p-8 border-2 bg-gray-800 border-gray-700 mt-12  rounded-md w-auto
+        ">
+          <div className="
+          flex flex-row
+            
+          ">
+            <h2 className="
+            justify-start
+              text-l font-bold text-white
+            ">
+              SQL Query
+            </h2>
+          </div>
+          <div className="
+            flex text-center py-8
+          ">
+            <pre className="
+              overflow-auto
+              bg-white
+
+            ">
+              <code className="
+                border-2 border-gray-700 bg-white rounded-md p-2 mt-4 
+              "
+                lang="sql"
+              >
+                {outputText}
+              </code>
+            </pre>
+          </div>
+          
+          </div>
+          )
+        }
         
       </main>
     </>
