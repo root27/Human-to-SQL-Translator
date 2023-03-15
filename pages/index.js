@@ -47,7 +47,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="
-        flex flex-col bg-gray-900 items-center  mx-auto  min-h-screen py-4
+        flex flex-col bg-gray-900 items-center  mx-auto  min-h-screen py-4 
       ">
         <h1 className="
           text-3xl font-bold text-white mt-8
@@ -55,7 +55,9 @@ export default function Home() {
           Human - SQL Translator
         </h1>
         <div className="
-          flex flex-col  p-8 border-2 bg-gray-800 border-gray-700 mt-12 w-auto rounded-md 
+          flex flex-col  p-8 border-2 bg-gray-800 border-gray-700 mt-12  rounded-md 
+          md:w-1/2 lg:w-auto
+        
         ">
           <div className="
           flex flex-row
